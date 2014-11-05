@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema",
+    "title": "IIJmio Coupon API - Base",
+    "definitions": {
+        "returnCode": {
+            "description": "リターンコード",
+            "example": "OK",
+            "type": [ "string" ]
+        },
+        "plan": {
+            "description": "プラン名",
+            "example": "Family Share",
+            "type": [ "string" ],
+            "enum": [
+                "Family Share",
+                "Minimum Start",
+                "Light Start"
+            ]                                
+        },
+        "hddServiceCode": {
+            "description": "hddサービスコード",
+            "example": "hdd01234567",
+            "type": [ "string" ]
+        },
+        "hdoServiceCode": {
+            "description": "hdoサービスコード",
+            "example": "hdo01234567",
+            "type": [ "string" ]
+        },
+        "couponUse": {
+            "description": "クーポン使用中（クーポンON）の場合に true, それ以外は false",
+            "example": false,
+            "type": [ "boolean" ]
+        }
+    },
+    "description": "FIXME",
+    "links": [  ],
+    
+    "properties": { },
+    
+    "type": [ "object" ],
+    "id": "schemata/base"
+}

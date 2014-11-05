@@ -1,0 +1,72 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema",
+    "title": "IIJmio Coupon API - Packet",
+    "definitions": {
+        "date": {
+            "description": "通信を行った日付",
+            "example": "201403",
+            "type": [ "string" ]
+        },
+        "withCoupon": {
+            "description": "クーポン使用状態でのデータ利用量（MB単位）",
+            "example": 59,
+            "type": [ "integer" ]
+        },
+        "withoutCoupon": {
+            "description": "クーポン不使用状態でのデータ利用量（MB単位）",
+            "example": 21,
+            "type": [ "integer" ]
+        }
+    },
+    "description": "データ利用状況",
+    "links": [
+        {
+            "description": "データ利用量を照会します。過去30日分と当日のデータ利用量（MB単位）が日付順に返ります。通信が行われなかった日についても、0 として値が返ります。",
+            "href": "/log/packet/",
+            "method": "GET",
+            "rel": "instances",
+            "title": "List"
+        }
+    ],
+    "properties": {
+        "returnCode": { "$ref": "/schemata/base#/definitions/returnCode" },
+        "packetLogInfo": {
+            "type": [ "array" ],
+            "items": {
+                "type": [ "object" ],
+                "properties": {
+                    "hddServiceCode": { "$ref": "/schemata/base#/definitions/hddServiceCode" },
+                    "plan": { "$ref": "/schemata/base#/definitions/plan" },
+                    "hdoInfo": {
+                        "type": [ "array" ],
+                        "items": {
+                            "type": [ "object" ],
+                            "properties": {
+                                "hdoServiceCode" : { "$ref": "/schemata/base#/definitions/hdoServiceCode" },
+                                "packetLog": {
+                                    "type": [ "array" ],
+                                    "items": {
+                                        "type": [ "object" ],
+                                        "properties": {
+                                            "date" : { "$ref": "/schemata/packet#/definitions/date" },
+                                            "withCoupon" : { "$ref": "/schemata/packet#/definitions/withCoupon" },
+                                            "withoutCoupon" : { "$ref": "/schemata/packet#/definitions/withoutCoupon" }
+                                        },
+                                        "required": [ "date", "withCoupon", "withoutCoupon" ]
+                                    }
+                                }
+                            },
+                            "required": [ "hdoServiceCode", "packetLog" ]
+                        }
+                    }
+                },
+                "required": [ "hddServiceCode", "plan", "hdoInfo", "coupon" ]
+            }
+        }
+    },
+    "required": [ "returnCode" ],
+    "type": [
+        "object"
+    ],
+    "id": "schemata/packet"
+}

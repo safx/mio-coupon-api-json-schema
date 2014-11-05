@@ -1,0 +1,149 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema",
+    "title": "IIJmio Coupon API - Coupon",
+    "definitions": {
+        "number": {
+            "description": "回線の電話番号",
+            "example": "08011112222",
+            "type": [ "string" ]
+        },
+        "iccid": {
+            "description": "回線のICCID",
+            "example": "DN000011112222",
+            "type": [ "string" ]
+        },
+        "regulation": {
+            "description": "通信規制中の場合に true, それ以外は false",
+            "example": false,
+            "type": [ "boolean" ]
+        },
+        "sms": {
+            "description": "SMS機能付きの場合に true, それ以外は false（音声通話機能付きSIMカードの場合も true が返ります）",
+            "example": false,
+            "type": [ "boolean" ]
+        },
+        "voice": {
+            "description": "音声通話機能付きの場合に true, それ以外は false",
+            "example": false,
+            "type": [ "boolean" ]
+        },
+
+        "volume": {
+            "description": "クーポン残量 (MB単位)",
+            "example": 42,
+            "type": [ "integer" ]
+        },
+        "expire": {
+            "description": "クーポン有効期限月",
+            "example": "201403",
+            "type": [ "string", "null" ]
+        },
+        "type": {
+            "description": "バンドルクーポンの場合に bundle, 追加クーポンの場合に topup, SIM内クーポンの場合に sim",
+            "example": "bundle",
+            "type": [ "string" ],
+            "enum": [
+                "bundle",
+                "topup",
+                "sim"
+            ]
+        },
+
+        "coupon": {
+            "type": [ "object" ],
+            "properties": {
+                "volume": { "$ref": "/schemata/coupon#/definitions/volume" },
+                "expire": { "$ref": "/schemata/coupon#/definitions/expire" },
+                "type"  : { "$ref": "/schemata/coupon#/definitions/type" }
+            },
+            "required": [ "volume", "expire", "type" ]
+        }
+    },
+    "description": "クーポン状態の照会と切り替え",
+    "links": [
+        {
+            "description": "クーポン残量とクーポンのON/OFF状態を照会します",
+            "href": "/coupon/",
+            "method": "GET",
+            "rel": "instances",
+            "title": "List"
+        },
+        {
+            "description": "クーポンのON/OFFを切り替えます。クーポン利用状態が変化しないリクエスト(現在 couponUse: true な回線に対する couponUse: true のリクエストなど)の場合もエラーとして判定されず、正常応答(200)が返ります",
+            "href": "/coupon/",
+            "method": "PUT",
+            "rel": "update",
+            "schema": {
+                "properties": {
+                    "couponInfo": {
+                        "description": "クーポン情報",
+                        "type": [ "array" ],
+                        "items": {
+                            "type": [ "object" ],
+                            "properties": {
+                                "hdoInfo": {
+                                    "type": [ "array" ],
+                                    "items": {
+                                        "type": [ "object" ],
+                                        "properties": {
+                                            "hdoServiceCode" : { "$ref": "/schemata/base#/definitions/hdoServiceCode" },
+                                            "couponUse"      : { "$ref": "/schemata/base#/definitions/couponUse" }
+                                        },
+                                        "required": [ "hdoServiceCode", "couponUse" ]
+                                    }
+                                }
+                            },
+                            "required": [ "hdoInfo" ]
+                        }
+                    }
+                },
+                "required": [ "couponInfo" ],
+                "type": [ "object" ]
+            },
+            "title": "Change"
+        }
+    ],
+    "properties": {
+        "returnCode": { "$ref": "/schemata/base#/definitions/returnCode" },
+        "couponInfo": {
+            "type": [ "array" ],
+            "items": {
+                "type": [ "object" ],
+                "properties": {
+                    "hddServiceCode": { "$ref": "/schemata/base#/definitions/hddServiceCode" },
+                    "plan": { "$ref": "/schemata/base#/definitions/plan" },
+                    "hdoInfo": {
+                        "type": [ "array" ],
+                        "items": {
+                            "type": [ "object" ],
+                            "properties": {
+                                "hdoServiceCode" : { "$ref": "/schemata/base#/definitions/hdoServiceCode" },
+                                "number"         : { "$ref": "/schemata/coupon#/definitions/number" },
+                                "iccid"          : { "$ref": "/schemata/coupon#/definitions/iccid" },
+                                "regulation"     : { "$ref": "/schemata/coupon#/definitions/regulation" },
+                                "sms"            : { "$ref": "/schemata/coupon#/definitions/sms" },
+                                "voice"          : { "$ref": "/schemata/coupon#/definitions/voice" },
+                                "couponUse"      : { "$ref": "/schemata/base#/definitions/couponUse" },
+                                "coupon"         : {
+                                    "type": [ "array" ],
+                                    "items": { "$ref": "/schemata/coupon#/definitions/coupon" }
+                                }
+                            },
+                            "required": [ "hdoServiceCode", "number", "iccid", "regulation", "sms", "voice", "couponUse", "coupon" ]
+                        }
+                    },
+                    "coupon": {
+                        "type": [ "array" ],
+                        "items": { "$ref": "/schemata/coupon#/definitions/coupon" }
+                    }
+                },
+                "required": [ "hddServiceCode", "plan", "hdoInfo", "coupon" ]
+            }
+        }
+    },
+    "required": [ "returnCode" ],
+    "type": [
+        "object"
+    ],
+    "id": "schemata/coupon"
+}
