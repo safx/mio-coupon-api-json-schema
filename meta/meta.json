@@ -1,0 +1,9 @@
+{
+    "description": "IIJmio Coupon API",
+    "id": "iijmio",
+    "links": [{
+        "href": "https://api.iijmio.jp/mobile/d/v1",
+        "rel": "self"
+    }],
+    "title": "IIJmio"
+}
