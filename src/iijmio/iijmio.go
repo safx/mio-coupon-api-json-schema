@@ -18,11 +18,11 @@ import (
 	"net/http"
 	"reflect"
 	"runtime"
-	"time"
+	//"time"
 )
 
 const (
-	Version          = ""
+	Version          = "0.1.0"
 	DefaultAPIURL    = "https://api.iijmio.jp/mobile/d/v1"
 	DefaultUserAgent = "iijmio/" + Version + " (" + runtime.GOOS + "; " + runtime.GOARCH + ")"
 )
@@ -80,6 +80,8 @@ func (s *Service) NewRequest(method, path string, body interface{}) (*http.Reque
 	if ctype != "" {
 		req.Header.Set("Content-Type", ctype)
 	}
+  req.Header.Add("X-IIJmio-Developer", "xxxxxxxxxxxxxxxxxxx")
+	req.Header.Add("X-IIJmio-Authorization", "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
 	return req, nil
 }
 
@@ -217,8 +219,8 @@ type Coupon struct {
 	ReturnCode string `json:"returnCode"`
 }
 
-func (s *Service) CouponList(lr *ListRange) ([]*Coupon, error) {
-	var couponList []*Coupon
+func (s *Service) CouponList(lr *ListRange) (*Coupon, error) {
+	var couponList *Coupon
 	return couponList, s.Get(&couponList, fmt.Sprintf("/coupon/"), lr)
 }
 
@@ -259,8 +261,7 @@ type Packet struct {
 	ReturnCode string `json:"returnCode"`
 }
 
-func (s *Service) PacketList(lr *ListRange) ([]*Packet, error) {
-	var packetList []*Packet
+func (s *Service) PacketList(lr *ListRange) (*Packet, error) {
+	var packetList *Packet
 	return packetList, s.Get(&packetList, fmt.Sprintf("/log/packet/"), lr)
 }
-
